@@ -35,8 +35,12 @@ standings = pd.read_csv(input_file)
 # for i in set(list):
 #     print(i, list.count(i)/100000)
 
+# Remove teams with zero balls
+
+
 # Run the drawing, removing selected teams once chosen
-iter_standings = standings.copy()
+standings_copy = standings.copy()
+iter_standings = standings_copy.loc[standings_copy['balls'] > 0]
 order = []
 pick = 1
 while len(iter_standings)>0:
@@ -46,6 +50,11 @@ while len(iter_standings)>0:
     delete_row = iter_standings[iter_standings["team"] == draw].index
     iter_standings.drop(delete_row, axis=0, inplace=True)
     pick += 1
+
+#Add zero balls
+zero_balls = standings_copy.loc[standings_copy['balls'] == 0]["team"]
+for i in zero_balls.values:
+    order.append(i)
 
 # Print some gibberish to make it look like the program is thinking really hard
 def print_gibberish(time_to_run, str_len=50):
